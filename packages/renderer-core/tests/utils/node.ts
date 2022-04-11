@@ -1,4 +1,4 @@
-import { PropChangeOptions } from "@ali/lowcode-designer";
+import { PropChangeOptions } from "@alilc/lowcode-designer";
 import EventEmitter from "events";
 
 export default class Node {

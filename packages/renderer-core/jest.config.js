@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { join } = require('path');
 const esModules = ['zen-logger'].join('|');
-const pkgNames = fs.readdirSync(join('..')).filter(pkgName => !pkgName.startsWith('.'));
+// const pkgNames = fs.readdirSync(join('..')).filter(pkgName => !pkgName.startsWith('.'));
 
 const jestConfig = {
   transform: {
@@ -37,7 +37,7 @@ const jestConfig = {
 };
 
 // 只对本仓库内的 pkg 做 mapping
-jestConfig.moduleNameMapper = {};
-jestConfig.moduleNameMapper[`^@alilc/lowcode\\-(${pkgNames.join('|')})$`] = '<rootDir>/../$1/src';
+// jestConfig.moduleNameMapper = {};
+// jestConfig.moduleNameMapper[`^@alilc/lowcode\\-(${pkgNames.join('|')})$`] = '<rootDir>/../$1/src';
 
 module.exports = jestConfig;
