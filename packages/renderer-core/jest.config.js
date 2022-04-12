@@ -1,14 +1,14 @@
 const fs = require('fs');
 const { join } = require('path');
 const esModules = ['zen-logger'].join('|');
-// const pkgNames = fs.readdirSync(join('..')).filter(pkgName => !pkgName.startsWith('.'));
+const pkgNames = fs.readdirSync(join('..')).filter(pkgName => !pkgName.startsWith('.'));
 
 const jestConfig = {
-  transform: {
-    // '^.+\\.[jt]sx?$': 'babel-jest',
-    '^.+\\.(ts|tsx)$': 'ts-jest',
-    // '^.+\\.(js|jsx)$': 'babel-jest',
-  },
+  // transform: {
+  //   // '^.+\\.[jt]sx?$': 'babel-jest',
+  //   '^.+\\.(ts|tsx)$': 'ts-jest',
+  //   // '^.+\\.(js|jsx)$': 'babel-jest',
+  // },
   // testMatch: ['**/document/node/node.test.ts'],
   // testMatch: ['**/designer/builtin-hotkey.test.ts'],
   // testMatch: ['**/plugin/plugin-manager.test.ts'],
@@ -37,7 +37,7 @@ const jestConfig = {
 };
 
 // 只对本仓库内的 pkg 做 mapping
-// jestConfig.moduleNameMapper = {};
-// jestConfig.moduleNameMapper[`^@alilc/lowcode\\-(${pkgNames.join('|')})$`] = '<rootDir>/../$1/src';
+jestConfig.moduleNameMapper = {};
+jestConfig.moduleNameMapper[`^@alilc/lowcode\\-(${pkgNames.join('|')})$`] = '<rootDir>/../$1/src';
 
 module.exports = jestConfig;
