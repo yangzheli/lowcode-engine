@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-new-func */
 import Debug from 'debug';
 import { isI18nData, RootSchema, NodeSchema, isJSExpression, JSSlot } from '@alilc/lowcode-types';
@@ -196,14 +197,15 @@ export function transformArrayToMap(arr: any[], key: string, overwrite = true) {
 }
 
 export function checkPropTypes(value: any, name: string, rule: any, componentName: string) {
+  let ruleFunction = rule;
   if (typeof rule === 'string') {
-    rule = new Function(`"use strict"; const PropTypes = arguments[0]; return ${rule}`)(PropTypes2);
+    ruleFunction = new Function(`"use strict"; const PropTypes = arguments[0]; return ${rule}`)(PropTypes2);
   }
-  if (!rule || typeof rule !== 'function') {
+  if (!ruleFunction || typeof ruleFunction !== 'function') {
     console.warn('checkPropTypes should have a function type rule argument');
     return true;
   }
-  const err = rule(
+  const err = ruleFunction(
     {
       [name]: value,
     },
@@ -220,8 +222,15 @@ export function checkPropTypes(value: any, name: string, rule: any, componentNam
 }
 
 
+/**
+ * transform string to a function
+ * @param str function in string form
+ * @returns funtion
+ */
 export function transformStringToFunction(str: string) {
-  if (typeof str !== 'string') return str;
+  if (typeof str !== 'string') {
+    return str;
+  }
   if (inSameDomain() && (window.parent as any).__newFunc) {
     return (window.parent as any).__newFunc(`"use strict"; return ${str}`)();
   } else {

@@ -8,6 +8,7 @@ import {
   getValue,
   getI18n,
   transformArrayToMap,
+  transformStringToFunction,
 } from '../../src/utils/common';
 
 describe('test isSchema', () => {
@@ -209,5 +210,33 @@ describe('test transformArrayToMap ', () => {
     expect(transformArrayToMap(mockArray, 'name').rose.age).toBe(20);
     // key not exists
     expect(transformArrayToMap(mockArray, 'nameEn')).toStrictEqual({});
+  });
+});
+
+
+
+describe('test transformStringToFunction ', () => {
+  it('should work', () => {
+    const mockFun = jest.fn();
+    expect(transformStringToFunction(mockFun)).toBe(mockFun);
+    expect(transformStringToFunction(111)).toBe(111);
+
+    let mockFnStr = 'function(){return 111;}';
+    let fn = transformStringToFunction(mockFnStr);
+    expect(fn()).toBe(111);
+
+    mockFnStr = '() => { return 222; }';
+    fn = transformStringToFunction(mockFnStr);
+    expect(fn()).toBe(222);
+
+    mockFnStr = 'function getValue() { return 333; }';
+    fn = transformStringToFunction(mockFnStr);
+    expect(fn()).toBe(333);
+
+    mockFnStr = 'function getValue(aaa) {\
+       return aaa; \
+    }';
+    fn = transformStringToFunction(mockFnStr);
+    expect(fn(123)).toBe(123);
   });
 });
