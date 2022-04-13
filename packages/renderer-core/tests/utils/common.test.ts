@@ -10,6 +10,7 @@ import {
   transformArrayToMap,
   transformStringToFunction,
   isVariable,
+  capitalizeFirstLetter,
 } from '../../src/utils/common';
 
 describe('test isSchema', () => {
@@ -251,5 +252,17 @@ describe('test isVariable ', () => {
     expect(isVariable({})).toBeFalsy();
     expect(isVariable({ type: 'any other type' })).toBeFalsy();
     expect(isVariable({ type: 'variable' })).toBeTruthy();
+  });
+});
+
+describe('test capitalizeFirstLetter ', () => {
+  it('should work', () => {
+    expect(capitalizeFirstLetter(null)).toBeNull();
+    expect(capitalizeFirstLetter()).toBeUndefined();
+    expect(capitalizeFirstLetter([1, 2, 3])).toStrictEqual([1, 2, 3]);
+    expect(capitalizeFirstLetter({ a: 1 })).toStrictEqual({ a: 1 });
+    expect(capitalizeFirstLetter('')).toStrictEqual('');
+    expect(capitalizeFirstLetter('a')).toStrictEqual('A');
+    expect(capitalizeFirstLetter('abcd')).toStrictEqual('Abcd');
   });
 });

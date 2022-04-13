@@ -284,8 +284,15 @@ export function parseExpression(str: any, self: any) {
   }
 }
 
-// 首字母大写
+/**
+ * capitalize first letter
+ * @param word string to be proccessed
+ * @returns string capitalized string
+ */
 export function capitalizeFirstLetter(word: string) {
+  if (!word || typeof word !== 'string' || word.length === 0) {
+    return word;
+  }
   return word[0].toUpperCase() + word.slice(1);
 }
 
