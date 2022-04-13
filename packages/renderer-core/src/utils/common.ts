@@ -289,8 +289,16 @@ export function capitalizeFirstLetter(word: string) {
   return word[0].toUpperCase() + word.slice(1);
 }
 
+/**
+ * check if obj is type of variable structure
+ * @param obj object to be checked
+ * @returns boolean
+ */
 export function isVariable(obj: any) {
-  return obj && typeof obj === 'object' && obj?.type === 'variable';
+  if (!obj || Array.isArray(obj)) {
+    return false;
+  }
+  return typeof obj === 'object' && obj?.type === 'variable';
 }
 
 /* 将 i18n 结构，降级解释为对 i18n 接口的调用 */
@@ -302,32 +310,9 @@ export function parseI18n(i18nInfo: any, self: any) {
 }
 
 export function forEach(obj: any, fn: any, context?: any) {
-  obj = obj || {};
-  Object.keys(obj).forEach(key => fn.call(context, obj[key], key));
+  const targetObj = obj || {};
+  Object.keys(targetObj).forEach((key) => fn.call(context, obj[key], key));
 }
-
-// export function shallowEqual(objA: any, objB: any) {
-//   if (objA === objB) {
-//     return true;
-//   }
-
-//   if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
-//     return false;
-//   }
-
-//   const keysA = Object.keys(objA);
-//   if (keysA.length !== Object.keys(objB).length) {
-//     return false;
-//   }
-
-//   for (let i = 0, key; i < keysA.length; i++) {
-//     key = keysA[i];
-//     if (!objB.hasOwnProperty(key) || objA[key] !== objB[key]) {
-//       return false;
-//     }
-//   }
-//   return true;
-// }
 
 export function serializeParams(obj: any) {
   let rst: any = [];

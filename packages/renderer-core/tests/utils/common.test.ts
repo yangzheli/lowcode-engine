@@ -9,6 +9,7 @@ import {
   getI18n,
   transformArrayToMap,
   transformStringToFunction,
+  isVariable,
 } from '../../src/utils/common';
 
 describe('test isSchema', () => {
@@ -238,5 +239,17 @@ describe('test transformStringToFunction ', () => {
     }';
     fn = transformStringToFunction(mockFnStr);
     expect(fn(123)).toBe(123);
+  });
+});
+
+
+describe('test isVariable ', () => {
+  it('should work', () => {
+    expect(isVariable(null)).toBeFalsy();
+    expect(isVariable(undefined)).toBeFalsy();
+    expect(isVariable([1, 2, 3])).toBeFalsy();
+    expect(isVariable({})).toBeFalsy();
+    expect(isVariable({ type: 'any other type' })).toBeFalsy();
+    expect(isVariable({ type: 'variable' })).toBeTruthy();
   });
 });
