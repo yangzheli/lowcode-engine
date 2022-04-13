@@ -290,10 +290,14 @@ export function parseExpression(str: any, self: any) {
  * @returns string capitalized string
  */
 export function capitalizeFirstLetter(word: string) {
-  if (!word || typeof word !== 'string' || word.length === 0) {
+  if (!word || !isString(word) || word.length === 0) {
     return word;
   }
   return word[0].toUpperCase() + word.slice(1);
+}
+
+export function isString(str: any): boolean {
+  return {}.toString.call(str) === '[object String]';
 }
 
 /**
@@ -316,9 +320,18 @@ export function parseI18n(i18nInfo: any, self: any) {
   }, self);
 }
 
-export function forEach(obj: any, fn: any, context?: any) {
-  const targetObj = obj || {};
-  Object.keys(targetObj).forEach((key) => fn.call(context, obj[key], key));
+/**
+ * for each key in targetObj, run fn with the value of the value, and the context paased in.
+ * @param targetObj object that keys will be for each
+ * @param fn function that process each item
+ * @param context
+ */
+export function forEach(targetObj: any, fn: any, context?: any) {
+  if (!targetObj || Array.isArray(targetObj) || isString(targetObj) || typeof targetObj !== 'object') {
+    return;
+  }
+
+  Object.keys(targetObj).forEach((key) => fn.call(context, targetObj[key], key));
 }
 
 export function serializeParams(obj: any) {

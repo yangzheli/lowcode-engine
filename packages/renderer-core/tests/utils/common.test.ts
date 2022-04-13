@@ -11,6 +11,8 @@ import {
   transformStringToFunction,
   isVariable,
   capitalizeFirstLetter,
+  forEach,
+  isString,
 } from '../../src/utils/common';
 
 describe('test isSchema', () => {
@@ -264,5 +266,48 @@ describe('test capitalizeFirstLetter ', () => {
     expect(capitalizeFirstLetter('')).toStrictEqual('');
     expect(capitalizeFirstLetter('a')).toStrictEqual('A');
     expect(capitalizeFirstLetter('abcd')).toStrictEqual('Abcd');
+  });
+});
+
+describe('test forEach ', () => {
+  it('should work', () => {
+    const mockFn = jest.fn();
+    
+    forEach(null, mockFn);
+    expect(mockFn).toBeCalledTimes(0);
+
+    forEach(undefined, mockFn);
+    expect(mockFn).toBeCalledTimes(0);
+
+    forEach([1, 2, 3], mockFn);
+    expect(mockFn).toBeCalledTimes(0);
+
+    forEach('stringValue', mockFn);
+    expect(mockFn).toBeCalledTimes(0);
+
+    forEach({ a: 1, b: 2, c: 3 }, mockFn);
+    expect(mockFn).toBeCalledTimes(3);
+    
+    const mockFn2 = jest.fn();
+    forEach({ a: 1 }, mockFn2, { b: 'bbb' });
+    expect(mockFn2).toHaveBeenCalledWith(1, 'a');
+
+    let sum = 0;
+    const mockFn3 = function(value, key) { sum = value + this.b;  };
+    forEach({ a: 1 }, mockFn3, { b: 10 });
+    expect(sum).toEqual(11);
+  });
+});
+
+describe('test isString ', () => {
+  it('should work', () => {
+    expect(isString(123)).toBeFalsy();
+    expect(isString([])).toBeFalsy();
+    expect(isString({})).toBeFalsy();
+    expect(isString(null)).toBeFalsy();
+    expect(isString(undefined)).toBeFalsy();
+    expect(isString(true)).toBeFalsy();
+    expect(isString('111')).toBeTruthy();
+    expect(isString(new String('111'))).toBeTruthy();
   });
 });
