@@ -333,13 +333,22 @@ export function forEach(targetObj: any, fn: any, context?: any) {
 
   Object.keys(targetObj).forEach((key) => fn.call(context, targetObj[key], key));
 }
-
+/**
+ * process params for using in a url query
+ * @param obj params to be processed
+ * @returns string
+ */
 export function serializeParams(obj: any) {
-  let rst: any = [];
+  let result: any = [];
   forEach(obj, (val: any, key: any) => {
-    if (val === null || val === undefined || val === '') return;
-    if (typeof val === 'object') rst.push(`${key}=${encodeURIComponent(JSON.stringify(val))}`);
-    else rst.push(`${key}=${encodeURIComponent(val)}`);
+    if (val === null || val === undefined || val === '') {
+      return;
+    }
+    if (typeof val === 'object') {
+      result.push(`${key}=${encodeURIComponent(JSON.stringify(val))}`);
+    } else {
+      result.push(`${key}=${encodeURIComponent(val)}`); 
+    }
   });
-  return rst.join('&');
+  return result.join('&');
 }

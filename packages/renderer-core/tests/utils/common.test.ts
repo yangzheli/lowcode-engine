@@ -13,6 +13,7 @@ import {
   capitalizeFirstLetter,
   forEach,
   isString,
+  serializeParams,
 } from '../../src/utils/common';
 
 describe('test isSchema', () => {
@@ -309,5 +310,15 @@ describe('test isString ', () => {
     expect(isString(true)).toBeFalsy();
     expect(isString('111')).toBeTruthy();
     expect(isString(new String('111'))).toBeTruthy();
+  });
+});
+
+describe('test serializeParams ', () => {
+  it('should work', () => {
+    const mockParams = { a: 1, b: 2, c: 'cvalue', d:[1, 'a', {}], e: {e1: 'value1', e2: 'value2'}};
+    const result = serializeParams(mockParams);
+    const decodedParams = decodeURIComponent(result);
+    expect(result).toBe('a=1&b=2&c=cvalue&d=%5B1%2C%22a%22%2C%7B%7D%5D&e=%7B%22e1%22%3A%22value1%22%2C%22e2%22%3A%22value2%22%7D');
+    expect(decodedParams).toBe('a=1&b=2&c=cvalue&d=[1,"a",{}]&e={"e1":"value1","e2":"value2"}');
   });
 });
