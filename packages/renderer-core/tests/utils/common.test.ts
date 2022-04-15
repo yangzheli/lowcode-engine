@@ -14,6 +14,7 @@ import {
   forEach,
   isString,
   serializeParams,
+  parseExpression,
 } from '../../src/utils/common';
 
 describe('test isSchema', () => {
@@ -320,5 +321,16 @@ describe('test serializeParams ', () => {
     const decodedParams = decodeURIComponent(result);
     expect(result).toBe('a=1&b=2&c=cvalue&d=%5B1%2C%22a%22%2C%7B%7D%5D&e=%7B%22e1%22%3A%22value1%22%2C%22e2%22%3A%22value2%22%7D');
     expect(decodedParams).toBe('a=1&b=2&c=cvalue&d=[1,"a",{}]&e={"e1":"value1","e2":"value2"}');
+  });
+});
+
+describe.only('test parseExpression ', () => {
+  it('can handle JSExpression', () => {
+    const mockExpression = {
+      "type": "JSExpression",
+      "value": "function (params) { return this.scopeValue + params.param1 + 5;}"
+    };
+    let result = parseExpression(mockExpression, { scopeValue: 1 });
+    expect(result({ param1: 2 })).toBe((1 + 2 + 5));
   });
 });

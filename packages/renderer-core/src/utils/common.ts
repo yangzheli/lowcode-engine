@@ -267,16 +267,20 @@ export function parseExpression(str: any, self: any) {
   try {
     const contextArr = ['"use strict";', 'var __self = arguments[0];'];
     contextArr.push('return ');
-    let tarStr;
+    let tarStr: string;
 
     tarStr = (str.value || '').trim();
+
+    // NOTE: use __self replace 'this' in the original function str
+    // may be wrong in extreme case which contains '__self' already
     tarStr = tarStr.replace(/this(\W|$)/g, (_a: any, b: any) => `__self${b}`);
     tarStr = contextArr.join('\n') + tarStr;
-    // 默认调用顶层窗口的parseObj,保障new Function的window对象是顶层的window对象
+    // 默认调用顶层窗口的parseObj, 保障new Function的window对象是顶层的window对象
     if (inSameDomain() && (window.parent as any).__newFunc) {
       return (window.parent as any).__newFunc(tarStr)(self);
     }
     const code = `with($scope || {}) { ${tarStr} }`;
+    console.log('debug only:\n', code);
     return new Function('$scope', code)(self);
   } catch (err) {
     debug('parseExpression.error', err, str, self);
@@ -296,6 +300,11 @@ export function capitalizeFirstLetter(word: string) {
   return word[0].toUpperCase() + word.slice(1);
 }
 
+/**
+ * check str passed in is a string type of not
+ * @param str obj to be checked
+ * @returns boolean
+ */
 export function isString(str: any): boolean {
   return {}.toString.call(str) === '[object String]';
 }
@@ -347,7 +356,7 @@ export function serializeParams(obj: any) {
     if (typeof val === 'object') {
       result.push(`${key}=${encodeURIComponent(JSON.stringify(val))}`);
     } else {
-      result.push(`${key}=${encodeURIComponent(val)}`); 
+      result.push(`${key}=${encodeURIComponent(val)}`);
     }
   });
   return result.join('&');
